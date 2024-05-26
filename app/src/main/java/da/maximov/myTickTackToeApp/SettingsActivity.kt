@@ -1,4 +1,4 @@
-package hehe.obebos.myTickTackToeApp
+package da.maximov.myTickTackToeApp
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import hehe.obebos.myTickTackToeApp.databinding.ActivitySettingsBinding
+import da.maximov.myTickTackToeApp.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 

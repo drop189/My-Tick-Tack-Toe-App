@@ -1,4 +1,4 @@
-package hehe.obebos.myTickTackToeApp
+package da.maximov.myTickTackToeApp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package hehe.obebos.myTickTackToeApp
+package da.maximov.myTickTackToeApp
 
 import android.app.Dialog
 import android.content.Intent
@@ -14,7 +14,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import hehe.obebos.myTickTackToeApp.databinding.ActivityGameBinding
+import da.maximov.myTickTackToeApp.databinding.ActivityGameBinding
 
 class GameActivity : AppCompatActivity() {
 

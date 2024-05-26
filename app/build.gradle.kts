@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "hehe.obebos.myTickTackToeApp"
+    namespace = "da.maximov.myTickTackToeApp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "hehe.obebos.myTickTackToeApp"
+        applicationId = "da.maximov.myTickTackToeApp"
         minSdk = 21
         targetSdk = 34
         versionCode = 1

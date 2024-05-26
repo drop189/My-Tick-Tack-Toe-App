@@ -1,4 +1,4 @@
-package hehe.obebos.myTickTackToeApp
+package da.maximov.myTickTackToeApp
 
 import org.junit.Test
 
