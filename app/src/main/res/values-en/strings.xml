@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Tick-Tack-Toe</string>
+    <string name="title_new_game">New Game</string>
+    <string name="title_continue_game">"Continue Game "</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_volume">Volume</string>
+    <string name="dialog_continue_game">Continue Game</string>
+    <string name="dialog_settings">Settings</string>
+    <string name="dialog_exit">Save and Exit</string>
+    <string name="player_win">You Win!</string>
+    <string name="player_lose">You Lose!</string>
+    <string name="player_draw">Draw)</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="gameRules">Rules of Game</string>
+    <string name="vertical">Vertical Row</string>
+    <string name="horizontal">Horizontal Row</string>
+    <string name="diagonal">Diagonal Row</string>
+    <string name="backButton">Back</string>
+    <string name="easy">Easy</string>
+    <string name="popup_title">Menu</string>
+
+
+    <string-array name="game_level">
+
+        <item>EASY</item>
+        <item>MEDIUM</item>
+        <item>HARD</item>
+
+    </string-array>
+</resources>

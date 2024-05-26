@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Крестики-Нолики</string>
+    <string name="title_new_game">Новая игра</string>
+    <string name="title_continue_game">Продолжить игру</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_volume">Звук</string>
+    <string name="dialog_continue_game">Продолжить игру</string>
+    <string name="dialog_settings">Настройки</string>
+    <string name="dialog_exit">Сохранить и выйти</string>
+    <string name="player_win">Вы выиграли!</string>
+    <string name="player_lose">Вы проиграли!</string>
+    <string name="player_draw">Вы сыграли в ничью</string>
+    <string name="difficulty">Сложность</string>
+    <string name="gameRules">Правила игры</string>
+    <string name="vertical">Ряд по вертикали</string>
+    <string name="horizontal">Ряд по горизонтали</string>
+    <string name="diagonal">Ряд по диагонали</string>
+    <string name="backButton">Вернуться</string>
+    <string name="easy">Легко</string>
+    <string name="popup_title">Меню</string>
+
+    <string-array name="game_level">
+
+        <item>ЛЕГКО</item>
+        <item>НОРМАЛЬНО</item>
+        <item>СЛОЖНО</item>
+
+    </string-array>
+</resources>
