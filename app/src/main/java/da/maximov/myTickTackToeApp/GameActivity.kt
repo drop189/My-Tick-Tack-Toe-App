@@ -18,6 +18,29 @@ import da.maximov.myTickTackToeApp.databinding.ActivityGameBinding
 
 class GameActivity : AppCompatActivity() {
 
+    data class CellGameFiled(val row: Int, val column: Int)
+
+    data class StatusInfo(val status: Boolean, val side: String)
+
+    companion object {
+        const val PREF_TIME = "pref_time"
+        const val PREF_GAME_FIELD = "pref_game_field"
+
+        const val STATUS_PLAYER_WIN = 1
+        const val STATUS_PLAYER_LOSE = 2
+        const val STATUS_PLAYER_DRAW = 3
+
+        const val SEARCH_DEPTH_IN_MID = 4
+
+        const val REQUEST_POPUP_MENU = 1234
+
+        val scores = hashMapOf(
+            Pair(STATUS_PLAYER_WIN, -1.0),
+            Pair(STATUS_PLAYER_LOSE, 1.0),
+            Pair(STATUS_PLAYER_DRAW, 0.0)
+        )
+    }
+
     private lateinit var binding: ActivityGameBinding
 
     private lateinit var gameField: Array<Array<String>>
@@ -31,8 +54,7 @@ class GameActivity : AppCompatActivity() {
 
         binding = ActivityGameBinding.inflate(layoutInflater)
 
-        binding.ivToPopupMenu.setOnClickListener { showPopupMenu()  }
-
+        binding.ivToPopupMenu.setOnClickListener { showPopupMenu() }
 
         binding.ivToGameClose.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
@@ -57,9 +79,9 @@ class GameActivity : AppCompatActivity() {
         }
 
 
-
         enableEdgeToEdge()
         setContentView(binding.root)
+
 
         val time = intent.getLongExtra(MainActivity.EXTRA_TIME, 0)
         val gameField = intent.getStringExtra(MainActivity.EXTRA_GAME_FIELD)
@@ -93,6 +115,8 @@ class GameActivity : AppCompatActivity() {
         mediaPlayer.release()
     }
 
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         setVolumeMediaPlayer(settingsInfo.soundValue)
@@ -117,13 +141,28 @@ class GameActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-
         setVolumeMediaPlayer(settingsInfo.soundValue)
-//        mediaPlayer.start()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_POPUP_MENU) {
+            if (resultCode == RESULT_OK) {
+                settingsInfo = getSettingsInfo()
+                setVolumeMediaPlayer(settingsInfo.soundValue)
+
+                mediaPlayer = MediaPlayer.create(this, R.raw.sinister_cinematic_trailer)
+                mediaPlayer.isLooping = true
+                setVolumeMediaPlayer(settingsInfo.soundValue)
+
+                mediaPlayer.start()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun setVolumeMediaPlayer(soundValue: Int) {
-
         val volume = soundValue / 100.0
 
         mediaPlayer.setVolume(volume.toFloat(), volume.toFloat())
@@ -200,12 +239,9 @@ class GameActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Поле уже заполнено", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
     private fun isEmptyField(row: Int, column: Int): Boolean {
-
         return gameField[row][column] == " "
     }
 
@@ -220,9 +256,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun makeStepOfAIEasyLvl(): CellGameFiled {
-        var randRow = 0
-        var randColumn = 0
-
+        var randRow: Int
+        var randColumn: Int
 
         do {
             randRow = (0..2).random()
@@ -234,15 +269,15 @@ class GameActivity : AppCompatActivity() {
         return CellGameFiled(randRow, randColumn)
     }
 
-    private fun makeStepOfAIMediumLvl(depth: Int = 4): CellGameFiled {
+    private fun makeStepOfAIMediumLvl(depth: Int = SEARCH_DEPTH_IN_MID): CellGameFiled {
 
         var bestScore = Double.NEGATIVE_INFINITY
         var move = CellGameFiled(0, 0)
 
-        var board = gameField.map { it.clone() }.toTypedArray()
+        val board = gameField.map { it.clone() }.toTypedArray()
 
         board.forEachIndexed { indexRow, cols ->
-            cols.forEachIndexed { indexCols, cell ->
+            cols.forEachIndexed { indexCols, _ ->
                 if (board[indexRow][indexCols] == " ") {
                     board[indexRow][indexCols] = "0"
                     val score = minimax(board, false, depth)
@@ -259,19 +294,16 @@ class GameActivity : AppCompatActivity() {
         makeStep(move.row, move.column, "0")
 
         return move
-
-        // TODO: Изменить глубину поиска по необходимости
-
     }
 
     private fun makeStepOfAIHardLvl(): CellGameFiled {
         var bestScore = Double.NEGATIVE_INFINITY
         var move = CellGameFiled(0, 0)
 
-        var board = gameField.map { it.clone() }.toTypedArray()
+        val board = gameField.map { it.clone() }.toTypedArray()
 
         board.forEachIndexed { indexRow, cols ->
-            cols.forEachIndexed { indexCols, cell ->
+            cols.forEachIndexed { indexCols, _ ->
                 if (board[indexRow][indexCols] == " ") {
                     board[indexRow][indexCols] = "0"
                     val score = minimax(board, false)
@@ -290,6 +322,7 @@ class GameActivity : AppCompatActivity() {
         return move
     }
 
+
     private fun minimax(board: Array<Array<String>>, isMaximizing: Boolean): Double {
         val result = checkWinner(board)
         result?.let {
@@ -300,7 +333,7 @@ class GameActivity : AppCompatActivity() {
             var bestScore = Double.NEGATIVE_INFINITY
 
             board.forEachIndexed { indexRow, cols ->
-                cols.forEachIndexed { indexCols, cell ->
+                cols.forEachIndexed { indexCols, _ ->
                     if (board[indexRow][indexCols] == " ") {
                         board[indexRow][indexCols] = "0"
                         val score = minimax(board, false)
@@ -318,7 +351,7 @@ class GameActivity : AppCompatActivity() {
             var bestScore = Double.POSITIVE_INFINITY
 
             board.forEachIndexed { indexRow, cols ->
-                cols.forEachIndexed { indexCols, cell ->
+                cols.forEachIndexed { indexCols, _ ->
                     if (board[indexRow][indexCols] == " ") {
                         board[indexRow][indexCols] = "X"
                         val score = minimax(board, true)
@@ -332,8 +365,8 @@ class GameActivity : AppCompatActivity() {
             }
             return bestScore
         }
-
     }
+
     private fun minimax(board: Array<Array<String>>, isMaximizing: Boolean, depth: Int): Double {
 
         if (depth == 0 || isGameOver(board)) {
@@ -349,7 +382,7 @@ class GameActivity : AppCompatActivity() {
             var bestScore = Double.NEGATIVE_INFINITY
 
             board.forEachIndexed { indexRow, cols ->
-                cols.forEachIndexed { indexCols, cell ->
+                cols.forEachIndexed { indexCols, _ ->
                     if (board[indexRow][indexCols] == " ") {
                         board[indexRow][indexCols] = "0"
                         val score = minimax(board, false, depth - 1)
@@ -363,11 +396,10 @@ class GameActivity : AppCompatActivity() {
             }
             return bestScore
         } else {
-
             var bestScore = Double.POSITIVE_INFINITY
 
             board.forEachIndexed { indexRow, cols ->
-                cols.forEachIndexed { indexCols, cell ->
+                cols.forEachIndexed { indexCols, _ ->
                     if (board[indexRow][indexCols] == " ") {
                         board[indexRow][indexCols] = "X"
                         val score = minimax(board, true, depth - 1)
@@ -381,25 +413,24 @@ class GameActivity : AppCompatActivity() {
             }
             return bestScore
         }
-
     }
 
     private fun evaluateBoard(board: Array<Array<String>>): Double {
-        // Ваша логика для оценки текущего состояния доски
-        // Например, возвращайте положительные значения для выигрыша AI,
-        // отрицательные для выигрыша игрока, и 0 для ничьей
-        return 0.0
+        val winner = checkWinner(board)
+        return when (winner) {
+            STATUS_PLAYER_LOSE -> 1.0
+            STATUS_PLAYER_WIN -> -1.0
+            else -> 0.0
+        }
     }
 
     private fun isGameOver(board: Array<Array<String>>): Boolean {
-        // Ваша логика для проверки завершения игры (победа, ничья, и т.д.)
-        return false
+        return checkWinner(board) != null || board.all { row -> row.all { it != " " } }
     }
 
-
     private fun checkWinner(board: Array<Array<String>>): Int? {
-        var countRowsHu = 0
-        var countRowsAI = 0
+        var countRowsHu: Int
+        var countRowsAI: Int
         var countLDHu = 0
         var countLDAI = 0
         var countRDHu = 0
@@ -415,7 +446,7 @@ class GameActivity : AppCompatActivity() {
             countRowsHu = 0
             countRowsAI = 0
 
-            cols.forEachIndexed { indexCols, cell ->
+            cols.forEachIndexed { indexCols, _ ->
 
                 if (board[indexCols][indexRow] == "X")
                     countRowsHu++
@@ -440,15 +471,13 @@ class GameActivity : AppCompatActivity() {
                 return STATUS_PLAYER_LOSE
         }
 
-        board.forEach {
+        board.forEach { it ->
             if (it.find { it == " " } != null)
                 return null
         }
 
         return STATUS_PLAYER_DRAW
     }
-
-    data class CellGameFiled(val row: Int, val column: Int)
 
     private fun checkGameField(x: Int, y: Int, symbol: String): StatusInfo {
 
@@ -464,7 +493,6 @@ class GameActivity : AppCompatActivity() {
             if (gameField[i][i] == symbol) leftDiagonal++
             if (gameField[i][gameFieldSize - i - 1] == symbol) rightDiagonal++
         }
-
 
         return when (settingsInfo.rules) {
             1 -> {
@@ -546,11 +574,7 @@ class GameActivity : AppCompatActivity() {
 
             else -> StatusInfo(false, "")
         }
-
-
     }
-
-    data class StatusInfo(val status: Boolean, val side: String)
 
     private fun showGameStatus(status: Int) {
         val dialog = Dialog(this, R.style.Theme_MyTickTackToeApp)
@@ -589,26 +613,6 @@ class GameActivity : AppCompatActivity() {
         binding.chronometer.stop()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_POPUP_MENU) {
-            if (resultCode == RESULT_OK) {
-                settingsInfo = getSettingsInfo()
-                setVolumeMediaPlayer(settingsInfo.soundValue)
-
-                mediaPlayer = MediaPlayer.create(this, R.raw.sinister_cinematic_trailer)
-                mediaPlayer.isLooping = true
-                setVolumeMediaPlayer(settingsInfo.soundValue)
-
-                mediaPlayer.start()
-
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-
-
-    }
-
     private fun showPopupMenu() {
         val dialog = Dialog(this, R.style.Theme_MyTickTackToeApp)
         with(dialog) {
@@ -632,6 +636,7 @@ class GameActivity : AppCompatActivity() {
 
             dialog.hide()
             val intent = Intent(this, SettingsActivity::class.java)
+            @Suppress("DEPRECATION")
             startActivityForResult(intent, REQUEST_POPUP_MENU)
 
             binding.chronometer.start()
@@ -685,13 +690,10 @@ class GameActivity : AppCompatActivity() {
         }
 
         this.gameField.forEachIndexed { indexRow, strings ->
-            strings.forEachIndexed { indexColumn, s ->
+            strings.forEachIndexed { indexColumn, _ ->
                 makeStep(indexRow, indexColumn, this.gameField[indexRow][indexColumn])
-                /**   ?   */ // ?
             }
-
         }
-
     }
 
     private fun getSettingsInfo(): SettingsActivity.SettingsInfo {
@@ -704,24 +706,4 @@ class GameActivity : AppCompatActivity() {
             return SettingsActivity.SettingsInfo(soundValue, lvl, rules)
         }
     }
-
-
-    companion object {
-        const val STATUS_PLAYER_WIN = 1
-        const val STATUS_PLAYER_LOSE = 2
-        const val STATUS_PLAYER_DRAW = 3
-
-        val scores = hashMapOf(
-            Pair(STATUS_PLAYER_WIN, -1.0),
-            Pair(STATUS_PLAYER_LOSE, 1.0),
-            Pair(STATUS_PLAYER_DRAW, 0.0)
-        )
-
-        const val PREF_TIME = "pref_time"
-        const val PREF_GAME_FIELD = "pref_game_field"
-
-        const val REQUEST_POPUP_MENU = 123
-    }
-
-
 }

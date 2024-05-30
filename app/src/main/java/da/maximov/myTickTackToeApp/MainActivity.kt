@@ -10,12 +10,18 @@ import da.maximov.myTickTackToeApp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    data class InfoGame(val time: Long, val gameField: String)
+
+    companion object {
+        const val EXTRA_TIME = "extra_time"
+        const val EXTRA_GAME_FIELD = "extra_game_field"
+    }
+
     private lateinit var binding: ActivityMainBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
@@ -58,12 +64,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-
-
-
-
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -82,15 +82,5 @@ class MainActivity : AppCompatActivity() {
                 InfoGame(0L, "")
             }
         }
-
     }
-
-    data class InfoGame(val time: Long, val gameField: String)
-
-    companion object {
-        const val EXTRA_TIME = "extra_time"
-        const val EXTRA_GAME_FIELD = "extra_game_field"
-    }
-
-
 }

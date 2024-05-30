@@ -12,12 +12,20 @@ import da.maximov.myTickTackToeApp.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
+    data class SettingsInfo(val soundValue: Int, val lvl: Int, val rules: Int)
+
+    companion object {
+        const val PREF_LVL = "pref_lvl"
+        const val PREF_RULES = "pref_rules"
+        const val PREF_SOUND_VALUE = "pref_sound_value"
+    }
+
     private lateinit var binding: ActivitySettingsBinding
 
     private lateinit var mediaPlayer: MediaPlayer
-
     private var currentSoundValue = 0
     private var currentLvl = 0
+
     private var currentRules = 0
 
 
@@ -27,10 +35,9 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 //
         val data = getSettingsInfo()
-
-        //
+//
         mediaPlayer = MediaPlayer.create(this, R.raw.sinister_cinematic_trailer)
-        //
+//
         currentSoundValue = data.soundValue
         currentLvl = data.lvl
         currentRules = data.rules
@@ -152,20 +159,13 @@ class SettingsActivity : AppCompatActivity() {
 //
         enableEdgeToEdge()
         setContentView(binding.root)
-
-
-
-
-
-
-
+//
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
-
 
     private fun updateSoundValue(soundValue: Int) {
         with(getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE).edit()) {
@@ -204,13 +204,4 @@ class SettingsActivity : AppCompatActivity() {
             return SettingsInfo(soundValue, lvl, rules)
         }
     }
-
-    data class SettingsInfo(val soundValue: Int, val lvl: Int, val rules: Int)
-
-    companion object {
-        const val PREF_SOUND_VALUE = "pref_sound_value"
-        const val PREF_LVL = "pref_lvl"
-        const val PREF_RULES = "pref_rules"
-    }
-
 }
