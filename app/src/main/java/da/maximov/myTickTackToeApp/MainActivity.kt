@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import da.maximov.myTickTackToeApp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() { // TODO: Добавить PVP
 
     data class InfoGame(val time: Long, val gameField: String)
 
